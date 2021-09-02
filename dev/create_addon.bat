@@ -1,0 +1,1 @@
+powershell Compress-Archive scripts export_all_to_fbx.zip -Force
