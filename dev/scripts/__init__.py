@@ -4,7 +4,7 @@ from .export_tools import ExportTools
 bl_info = {
     "author": "Marcin Musiałek",
     "name": "Export all to fbx",
-    "version": (0, 0, 7),
+    "version": (0, 0, 9),
     "blender": (2, 80, 0),
     "category": "All",
     "description": "Exports all objects to fbx file as single object.",

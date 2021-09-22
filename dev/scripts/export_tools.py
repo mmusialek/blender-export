@@ -3,7 +3,7 @@ import datetime
 import os
 
 
-class ExportTools():    
+class ExportTools():
     # ------------------------------------------
     # config
     # ------------------------------------------
@@ -17,37 +17,43 @@ class ExportTools():
 
     # diselect all
     def unselect_all(self):
-        for obj in bpy.context.selected_objects:
-            obj.select_set(False)
-
+        bpy.ops.object.select_all(action='DESELECT')
 
     def export_obj_exp(self, objects, target_dir):
 
+        #  TODO: check if any of the object is visible
         if not os.path.isdir(target_dir) and objects:
-                os.makedirs(target_dir)
-
+            os.makedirs(target_dir)
 
         for obj in objects:
+            if not  obj.visible_get():
+                continue
+
             print("saving name: {0}, target: {1}".format(obj.name, target_dir))
 
             obj.select_set(True)
+            bpy.ops.object.select_hierarchy(direction='CHILD', extend=True)
 
             # Export the selected object as fbx
             bpy.ops.export_scene.fbx(check_existing=False,
-            filepath=target_dir + "\\" + obj.name + ".fbx",
-            filter_glob="*.fbx",
-            use_selection=True,
-            object_types={'MESH'},
-            bake_anim=True,
-            bake_anim_use_all_bones=True,
-            bake_anim_use_all_actions=True,
-            use_armature_deform_only=True,
-            bake_space_transform=True,
-            mesh_smooth_type="OFF",
-            add_leaf_bones=False,
-            path_mode='ABSOLUTE')
+                                     filepath=target_dir + "\\" + obj.name + ".fbx",
+                                     filter_glob="*.fbx",
+                                     use_selection=True,
+                                     object_types={'MESH', 'ARMATURE'},
+                                     bake_anim=True,
+                                     bake_anim_use_all_bones=True,
+                                     bake_anim_use_nla_strips=True,
+                                     bake_anim_use_all_actions=True,
+                                     bake_anim_force_startend_keying=True,
+                                     bake_anim_simplify_factor=1,
+                                     use_armature_deform_only=False,
+                                     bake_space_transform=True,
+                                     mesh_smooth_type="OFF",
+                                     add_leaf_bones=False,
+                                     path_mode='ABSOLUTE')
 
             obj.select_set(False)
+            bpy.ops.object.select_all(action='DESELECT')
 
 
     # support only 1 deep collection!

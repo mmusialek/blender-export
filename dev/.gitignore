@@ -288,3 +288,4 @@ unity/Logs
 
 # blender
 blender/**/*.blend1
+export_all_to_fbx.zip
